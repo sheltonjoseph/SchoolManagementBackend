@@ -9,6 +9,7 @@ router.post("/register", async (req, res) => {
     const savedStaff = await newStaff.save();
     res.status(201).json(savedStaff);
   } catch (err) {
+    console.log(err)
     res.status(500).json(err);
   }
 });

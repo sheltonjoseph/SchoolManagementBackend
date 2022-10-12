@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const studentRoute = require("./routes/student");
 const authRoute = require("./routes/auth");
 const staffRoute = require("./routes/staff");
+const cors = require("cors");
 
 
 
@@ -18,7 +19,7 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-
+  app.use(cors());
   app.use(express.json());
   app.use("/api/auth", authRoute);
   app.use("/api/students", studentRoute);
