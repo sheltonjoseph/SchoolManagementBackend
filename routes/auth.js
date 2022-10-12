@@ -4,11 +4,15 @@ const router = require("express").Router();
 
 // register
 router.post("/register", async (req, res) => {
-  const newStaff = new Staff(req.body);
+  console.log(req.body)
+  const newStaff = new Staff(JSON.parse(req.body.body));
+  // const newStaff = new Staff(req.body);
+
   try {
     const savedStaff = await newStaff.save();
     res.status(201).json(savedStaff);
   } catch (err) {
+    console.log(err)
     res.status(500).json(err);
   }
 });
@@ -22,19 +26,21 @@ router.post("/login", async (req, res) => {
       password: req.body.password,
     });
 
-    !staff && res.status(401).json("Wrong email or Password");
+    if(staff) {
+      const accessToken = jwt.sign(
+        {
+          id: staff._id,
+          isManagingStaff: staff.isManagingStaff,
+        },
+        process.env.JWT_SEC,
+        { expiresIn: "3d" }
+      );
 
-    const accessToken = jwt.sign(
-      {
-        id: staff._id,
-        isManagingStaff: staff.isManagingStaff,
-      },
-      process.env.JWT_SEC,
-      { expiresIn: "3d" }
-    );
-
-    const { password, ...others } = staff._doc;
-    res.status(200).json({ ...others, accessToken });
+      const { password, ...others } = staff._doc;
+      res.status(200).json({ ...others, accessToken });
+    } else {
+      res.status(401).json("Wrong email or Password");
+    }
   } catch (err) {
     res.status(500).json(err);
   }
