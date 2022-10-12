@@ -6,8 +6,8 @@ const StaffSchema = new mongoose.Schema(
     lastName: { type: String, required: true},
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    subjectId:{ type: Array },
-    gender:{type:String},
+    subjectId:{ type: Array  },
+    gender:{type:String , required: true },
     role:{type: String, required: true},
     isManagingStaff: {
       type: Boolean,
