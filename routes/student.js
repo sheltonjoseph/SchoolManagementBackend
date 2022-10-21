@@ -9,12 +9,14 @@ const router = require("express").Router();
 
 // Add Student
 router.post("/",verifyTokenAndAdmin, async (req, res) => {
+  console.log(req.body)
   const newStudent = new Students(req.body);
   try {
     const savedStudent = await newStudent.save();
     res.status(200).json(savedStudent);
   } catch (err) {
     res.status(500).json(err);
+    console.log(err)
   }
 });
 
@@ -31,6 +33,7 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
     res.status(200).json(updatedStudent);
   } catch (err) {
     res.status(500).json(err);
+    console.log(err)
   }
 });
 
