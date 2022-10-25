@@ -7,7 +7,7 @@ const StudentSchema = new mongoose.Schema(
     rollNo: { type: Number, required: true, unique: true },
     gender: { type: String, required: true },
     dob: { type: String, required: true },
-    classId: { type: Number, required: true },
+    classId: { type: String, required: true },
   },
   { timestamps: true }
 );

@@ -1,5 +1,8 @@
 const Class = require("../models/Class");
-const { verifyTokenAndAdmin } = require("./verifyToken");
+const {
+  verifyTokenAndAdmin,
+  verifyTokenAndAuthorization,
+} = require("./verifyToken");
 const router = require("express").Router();
 
 // Add NEW CLASS
@@ -23,8 +26,10 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
       },
       { new: true }
     );
+    console.log(updatedClass);
     res.status(200).json(updatedClass);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -41,32 +46,45 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
 
 //get CLASS Info
 
-router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
+router.get("/find/:id", verifyTokenAndAuthorization, async (req, res) => {
   try {
     const getClassInfo = await Class.findById(req.params.id);
     res.status(200).json(getClassInfo);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
 
-//get CLASS 
+//get  Staffs CLASS
 
-// router.get("/find/class/:class", verifyTokenAndAdmin, async (req, res) => {
-//     try {
-//       const getClass = await Class.findById(req.params.class);
-//       res.status(200).json(getClass);
-//     } catch (err) {
-//       res.status(500).json(err);
-//     }
-//   });
+router.get("/staff/:id", verifyTokenAndAuthorization, async (req, res) => {
+  try {
+    const getClassInfo = await Class.find();
+    let specificGrade = [];
+    getClassInfo.forEach((sub) => {
+      for(let s of sub.subjectInfo){
+        if (s.staffId === req.params.id) {
+          specificGrade.push(sub);
+          break;
+        }
+      }
+    });
+    res.status(200).json(specificGrade);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
 
 //get all Class
-router.get("/", verifyTokenAndAdmin, async (req, res) => {
+router.get("/", verifyTokenAndAuthorization, async (req, res) => {
   try {
     const getAllClass = await Class.find();
     res.status(200).json(getAllClass);
+    console.log(getAllClass);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });

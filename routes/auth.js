@@ -5,9 +5,11 @@ const router = require("express").Router();
 // register
 router.post("/register", async (req, res) => {
   console.log(req.body)
-  const newStaff = new Staff(JSON.parse(req.body.body));
-  // const newStaff = new Staff(req.body);
+  let body = JSON.parse(req.body.body)
+  const newStaff = new Staff(body);
 
+  // const newStaff = new Staff(req.body);
+  console.log(newStaff)
   try {
     const savedStaff = await newStaff.save();
     res.status(201).json(savedStaff);

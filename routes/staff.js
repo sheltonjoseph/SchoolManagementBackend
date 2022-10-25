@@ -7,6 +7,7 @@ const router = require("express").Router();
 
 // UPDATESTAFF
 router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
+  console.log(req.body)
   try {
     const updatedUser = await Staff.findByIdAndUpdate(
       req.params.id,
@@ -18,6 +19,7 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
     res.status(200).json(updatedUser);
   } catch (err) {
     res.status(500).json(err);
+    console.log(err)
   }
 });
 
